@@ -1,0 +1,59 @@
+body {
+    background-color: #313131;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+.menu {
+    position: absolute;
+    background-color: #595959;
+    border-bottom: .1em solid black;
+    top: 0;
+    width: 100%;
+    height: 2em;
+}
+
+.explorer {
+    position: absolute;
+    background-color: #595959;
+    border-bottom: .1em solid black;
+    border-right: .1em solid black;
+    width: 20%;
+    top: 2.1em;
+    bottom: 0;
+}
+
+.composer {
+    position: absolute;
+    background-color: #939393;
+    border-bottom: .1em solid black;
+    margin-left: .1em;
+    left: 20%;
+    right: 0;
+    top: 2.1em;
+    bottom: 10em;
+    overflow: auto;
+}
+
+.composer table {
+    min-width: 110%;
+}
+
+.composer td {
+    height: 1.5em;
+    border-bottom: .1em solid white;
+}
+
+.player {
+    position: absolute;
+    background-color: #434343;
+    border-bottom: .1em solid black;
+    margin-left: .1em;
+    left: 20%;
+    right: 0;
+    height: 9.9em;
+    bottom: 0;
+}
