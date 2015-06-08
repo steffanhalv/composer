@@ -23,6 +23,7 @@ body {
     border-right: .1em solid black;
     width: 20%;
     top: 2.1em;
+    z-index: 1;
     bottom: 0;
 }
 
@@ -43,8 +44,9 @@ body {
 }
 
 .composer td {
-    height: 1.5em;
-    border-bottom: .1em solid white;
+    height: 17px;
+    border-bottom: 1px solid white;
+    padding: 0;
 }
 
 .player {
@@ -56,4 +58,8 @@ body {
     right: 0;
     height: 9.9em;
     bottom: 0;
+}
+
+.track {
+    background-color: lightskyblue;
 }
