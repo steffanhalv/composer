@@ -34,6 +34,8 @@ $(document).ready(function() {
                 grid: [ 1, 20 ]
             }).resizable({
                 handles: "e, w"
+            }).attr({
+                source: 'test'
             });
         }
     });
