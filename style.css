@@ -78,6 +78,7 @@ body {
     height: 1em;
     width: 21px;
     background-color: red;
+    z-index: 1;
 }
 
 .browser-line {
