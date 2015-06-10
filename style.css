@@ -76,14 +76,14 @@ body {
 .browser-top {
     position: fixed;
     height: 1em;
-    width: 1em;
+    width: 21px;
     background-color: red;
 }
 
 .browser-line {
     position: fixed;
     width: 1px;
-    margin-left: .45em;
+    margin-left: 10px;
     height: 100%;
     background-color: red;
     z-index: 1;

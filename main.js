@@ -9,6 +9,12 @@ $(document).ready(function() {
             $('.player').css({
                 left: $('.explorer').width()
             });
+            $( ".browser-top" ).css({
+                left: $('.explorer').width()
+            });
+            $( ".browser-line" ).css({
+                left: $('.explorer').width()
+            });
         }
     });
 
@@ -40,6 +46,14 @@ $(document).ready(function() {
         }
     });
 
+    $( ".composer" ).scroll(function() {
+        $( ".browser-top" ).css({
+            marginLeft: -$('.composer').scrollLeft()
+        });
+        $( ".browser-line" ).css({
+            marginLeft: -$('.composer').scrollLeft()+10
+        });
+    });
 
     $( ".browser-line" ).draggable({
         containment: '.composer',
