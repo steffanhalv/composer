@@ -40,6 +40,37 @@ $(document).ready(function() {
         }
     });
 
+
+    $( ".browser-line" ).draggable({
+        containment: '.composer',
+        axis: 'x',
+        drag: function(e, ui) {
+            $( ".browser-top").css({
+                left: $( ".browser-line").position().left
+            });
+        },
+        stop: function(e, ui) {
+            $( ".browser-top").css({
+                left: $( ".browser-line").position().left
+            });
+        }
+    });
+
+    $( ".browser-top" ).draggable({
+        containment: '.composer',
+        axis: 'x',
+        drag: function(e, ui) {
+            $( ".browser-line").css({
+                left: $( ".browser-top").position().left
+            });
+        },
+        stop: function(e, ui) {
+            $( ".browser-line").css({
+                left: $( ".browser-top").position().left
+            });
+        }
+    });
+
 });
 
 var id = 0;
