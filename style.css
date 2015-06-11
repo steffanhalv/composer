@@ -42,6 +42,7 @@ body {
 
 .composer table {
     min-width: 110%;
+    margin-left: 10px;
 }
 
 .composer td {

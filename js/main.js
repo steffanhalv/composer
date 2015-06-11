@@ -36,7 +36,7 @@ $(document).ready(function() {
           }).resizable({
               handles: "e, w"
           }).attr({
-              source: 'test'
+              _length: ui.helper[0].attributes._length.value
           });
 
           initjPlayer(trackId, ui.helper[0].innerHTML);
@@ -162,7 +162,10 @@ var initjPlayer = function(id, file) {
       $('.browser-line').on('step', function() {
 
         var currentTime = parseInt(($('.browser-line').position().left-$('.explorer').width()-$('.composer').scrollLeft())-$('#'+id).position().left)+10;
-        console.log(currentTime);
+
+        while(currentTime>$('#'+id).attr('_length')) {
+          currentTime = currentTime - $('#'+id).attr('_length');
+        }
 
         if (($('#'+id).position().left-10)<=($('.browser-line').position().left-$('.explorer').width())&&
           ($('.browser-line').position().left-$('.explorer').width())<($('#'+id).position().left-10+$('#'+id).width())
