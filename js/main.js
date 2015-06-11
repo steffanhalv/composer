@@ -57,14 +57,23 @@ $(document).ready(function() {
       containment: '.composer',
       axis: 'x',
       drag: function(e, ui) {
-          $( ".browser-top").css({
-              left: $( ".browser-line").position().left
-          });
+        $( ".browser-top").css({
+            left: $( ".browser-line").position().left
+        });
       },
       stop: function(e, ui) {
-          $( ".browser-top").css({
-              left: $( ".browser-line").position().left
-          });
+        $( ".browser-top").css({
+            left: $( ".browser-line").position().left
+        });
+
+        if (!pause) {
+          pause = true;
+
+          setTimeout(function() {
+            pause = false;
+            play();
+          }, 500);
+        }
       }
   });
 
@@ -72,14 +81,22 @@ $(document).ready(function() {
       containment: '.composer',
       axis: 'x',
       drag: function(e, ui) {
-          $( ".browser-line").css({
-              left: $( ".browser-top").position().left
-          });
+        $( ".browser-line").css({
+            left: $( ".browser-top").position().left
+        });
       },
       stop: function(e, ui) {
-          $( ".browser-line").css({
-              left: $( ".browser-top").position().left
-          });
+        $( ".browser-line").css({
+            left: $( ".browser-top").position().left
+        });
+        if (!pause) {
+          pause = true;
+
+          setTimeout(function() {
+            pause = false;
+            play();
+          }, 500);
+        }
       }
   });
 
@@ -144,16 +161,19 @@ var initjPlayer = function(id, file) {
 
       $('.browser-line').on('step', function() {
 
-        var currentTime = parseInt(($('.browser-line').position().left-$('.explorer').width())-$('#'+id).position().left);
+        var currentTime = parseInt(($('.browser-line').position().left-$('.explorer').width()-$('.composer').scrollLeft())-$('#'+id).position().left)+10;
+        console.log(currentTime);
 
-        if ($('#'+id).position().left<=($('.browser-line').position().left-$('.explorer').width())&&
-          ($('.browser-line').position().left-$('.explorer').width())<($('#'+id).position().left+$('#'+id).width())
+        if (($('#'+id).position().left-10)<=($('.browser-line').position().left-$('.explorer').width())&&
+          ($('.browser-line').position().left-$('.explorer').width())<($('#'+id).position().left-10+$('#'+id).width())
           &&$('#jp_'+id).data().jPlayer.status.paused&&!pause) {
 
+          console.log('before');
           $('#jp_'+id).jPlayer( "play", currentTime );
 
-        } else if (($('.browser-line').position().left-$('.explorer').width())>($('#'+id).position().left+$('#'+id).width())) {
+        } else if (($('.browser-line').position().left-$('.explorer').width())>($('#'+id).position().left-10+$('#'+id).width())) {
 
+          console.log('after');
           $('#jp_'+id).jPlayer( "pause" );
 
         } else if (pause) {
