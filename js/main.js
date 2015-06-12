@@ -21,18 +21,19 @@ $(document).ready(function() {
   });
 
   $( ".composer li" ).droppable({
-    accept: ".audio",
+    accept: ".file",
     drop: function(e, ui) {
 
       var trackId = createTrackId();
-      var width = ui.helper[0].attributes._length.value;
-      $(this).append('<div class="track" id="'+trackId+'" style="width: '+width+'px">'+ui.helper[0].innerHTML+'<div id="jp_'+trackId+'"></div></div>');
+      var width = ui.helper[0].attributes.duration.value;
+      $(this).append('<div class="track" id="'+trackId+'" style="width: '+width+'px"><span>'+ui.helper[0].innerHTML+'</span><div id="jp_'+trackId+'"></div></div>');
       $('#'+trackId).css({
         position: 'absolute',
         left: ui.position.left-$('.explorer').width()+$('.composer').scrollLeft()
       }).draggable({
-        containment: '.composer',
+        containment: '.composer ul',
         snap: 'li',
+        snapMode: 'inner',
         stop: function() {
           if (!pause) {
             pause = true;
@@ -46,7 +47,7 @@ $(document).ready(function() {
       }).resizable({
         handles: "e, w"
       }).attr({
-        _length: ui.helper[0].attributes._length.value
+        duration: ui.helper[0].attributes.duration.value
       });
 
       initjPlayer(trackId, ui.helper[0].innerHTML);
@@ -64,7 +65,7 @@ $(document).ready(function() {
   });
 
   $( ".browser-line" ).draggable({
-      containment: '.composer',
+      containment: '.composer ul',
       axis: 'x',
       drag: function(e, ui) {
         $( ".browser-top").css({
@@ -110,7 +111,7 @@ $(document).ready(function() {
       }
   });
 
-  listFiles();
+  fetchFiles();
 
   $('#play').click(function() {
     pause = !pause;
@@ -125,42 +126,7 @@ var createTrackId = function() {
     return 'track_'+id;
 }
 
-var listFiles = function() {
 
-  $.ajax({
-    type: "GET",
-    url: "php/get_files.php",
-    dataType: "json",
-    cache: false,
-    success: function(result){
-      $.each(result, function() {
-        $('.explorer ul').append('<li><div class="audio" _length="'+this[1]+'">'+String(this[0])+'</div></li>');
-      });
-      initFiles();
-    }
-  });
-
-};
-
-var initFiles = function() {
-
-  $(".audio").each(function(){
-
-    var name = $(this).html();
-
-    $( this ).draggable({
-      revert: 'invalid',
-      snap: '.composer li',
-      helper: function(){
-        return '<div class="audio track" _length="'+Number($(this).attr('_length'))+'" style="width: '+Number($(this).attr('_length'))+'px">'+name+'</div>'
-      },
-      containment: 'document',
-      cursor: 'move'
-    });
-
-  });
-
-};
 
 var initjPlayer = function(id, file) {
 
@@ -174,20 +140,18 @@ var initjPlayer = function(id, file) {
 
         var currentTime = parseInt(($('.browser-line').position().left-$('.explorer').width()-$('.composer').scrollLeft())-$('#'+id).position().left)+10;
 
-        while(currentTime>$('#'+id).attr('_length')) {
-          currentTime = currentTime - $('#'+id).attr('_length');
+        while(currentTime>$('#'+id).attr('duration')) {
+          currentTime = currentTime - $('#'+id).attr('duration');
         }
 
         if (($('#'+id).position().left-10)<=($('.browser-line').position().left-$('.explorer').width())&&
           ($('.browser-line').position().left-$('.explorer').width())<($('#'+id).position().left-10+$('#'+id).width())
           &&$('#jp_'+id).data().jPlayer.status.paused&&!pause) {
 
-          console.log('before');
           $('#jp_'+id).jPlayer( "play", currentTime );
 
         } else if (($('.browser-line').position().left-$('.explorer').width())>($('#'+id).position().left-10+$('#'+id).width())) {
 
-          console.log('after');
           $('#jp_'+id).jPlayer( "pause" );
 
         } else if (pause) {
@@ -225,3 +189,28 @@ var play = function() {
   }
 
 }
+
+var exportTimeline = function() {
+
+  var tracks = [];
+
+  $('.track').each(function() {
+    var track = {
+      source: $(this).find('span').html(),
+      pad: $(this).position().left-10
+    };
+
+    tracks.push(track);
+
+  });
+
+  $.ajax({
+    type: 'POST',
+    url: 'php/export_timeline.php',
+    data: JSON.stringify(tracks),
+    success: function(msg) {
+      console.log(msg);
+    }
+  });
+
+};

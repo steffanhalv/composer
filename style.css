@@ -44,6 +44,7 @@ body {
     background-color: rgb(154, 161, 168);
     margin-top: 1em;
     margin-left: 10px;
+    width: 500em;
 }
 
 .composer li {
@@ -76,8 +77,8 @@ body {
     position: fixed;
     height: 1em;
     width: 21px;
-    background-color: red;
-    z-index: 1;
+    background-color: white;
+    z-index: 2;
 }
 
 .browser-line {

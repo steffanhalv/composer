@@ -1,5 +1,5 @@
 <?php
-$dir          = "../files/";
+$dir = "../files/";
 $files = array();
 
 if(is_dir($dir)){
