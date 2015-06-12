@@ -23,6 +23,8 @@ if(is_dir($dir)){
         }
     }
 
+    //EXPORT EXAMPLE sox -m "|sox fireflies.mp3 -p pad 6 0" "|sox times.mp3 -p pad 8 0" outputO.mp3
+
     echo json_encode($files);
 }
 ?>

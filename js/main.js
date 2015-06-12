@@ -20,28 +20,38 @@ $(document).ready(function() {
     }
   });
 
-  $( ".composer td" ).droppable({
-      accept: ".audio",
-      drop: function(e, ui) {
+  $( ".composer li" ).droppable({
+    accept: ".audio",
+    drop: function(e, ui) {
 
-          var trackId = createTrackId();
-          var width = ui.helper[0].attributes._length.value;
-          $(this).append('<div class="track" id="'+trackId+'" style="width: '+width+'px">'+ui.helper[0].innerHTML+'<div id="jp_'+trackId+'"></div></div>');
-          $('#'+trackId).css({
-              position: 'absolute',
-              left: ui.position.left-$('.explorer').width()+$('.composer').scrollLeft()
-          }).draggable({
-              containment: '.composer',
-              grid: [ 1, 20 ]
-          }).resizable({
-              handles: "e, w"
-          }).attr({
-              _length: ui.helper[0].attributes._length.value
-          });
+      var trackId = createTrackId();
+      var width = ui.helper[0].attributes._length.value;
+      $(this).append('<div class="track" id="'+trackId+'" style="width: '+width+'px">'+ui.helper[0].innerHTML+'<div id="jp_'+trackId+'"></div></div>');
+      $('#'+trackId).css({
+        position: 'absolute',
+        left: ui.position.left-$('.explorer').width()+$('.composer').scrollLeft()
+      }).draggable({
+        containment: '.composer',
+        snap: 'li',
+        stop: function() {
+          if (!pause) {
+            pause = true;
 
-          initjPlayer(trackId, ui.helper[0].innerHTML);
+            setTimeout(function() {
+              pause = false;
+              play();
+            }, 500);
+          }
+        }
+      }).resizable({
+        handles: "e, w"
+      }).attr({
+        _length: ui.helper[0].attributes._length.value
+      });
 
-      }
+      initjPlayer(trackId, ui.helper[0].innerHTML);
+
+    }
   });
 
   $( ".composer" ).scroll(function() {
@@ -140,8 +150,9 @@ var initFiles = function() {
 
     $( this ).draggable({
       revert: 'invalid',
+      snap: '.composer li',
       helper: function(){
-        return '<div class="track" _length="'+Number($(this).attr('_length'))+'" style="width: '+Number($(this).attr('_length'))+'px">'+name+'</div>'
+        return '<div class="audio track" _length="'+Number($(this).attr('_length'))+'" style="width: '+Number($(this).attr('_length'))+'px">'+name+'</div>'
       },
       containment: 'document',
       cursor: 'move'

@@ -40,13 +40,14 @@ body {
     z-index: 2;
 }
 
-.composer table {
-    min-width: 110%;
+.composer ul {
+    background-color: rgb(154, 161, 168);
+    margin-top: 1em;
     margin-left: 10px;
 }
 
-.composer td {
-    height: 17px;
+.composer li {
+    height: 29px;
     border-bottom: 1px solid white;
     padding: 0;
 }
@@ -64,8 +65,8 @@ body {
 }
 
 .track {
+    height: 29px;
     background-color: #508cfa;
-    margin-top: -10px;
     -webkit-border-radius: .1em;
     -moz-border-radius: .1em;
     border-radius: .2em;
