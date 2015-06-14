@@ -48,9 +48,35 @@ body {
 }
 
 .composer li {
-    height: 29px;
-    border-bottom: 1px solid white;
+    height: 30px;
+    border-top: 1px solid rgb(219, 219, 219);
     padding: 0;
+    background-color: rgb(147, 147, 147);
+}
+
+.explorer ul.folders li {
+    padding: .3em 1em;
+    color: rgb(255, 255, 255);
+    display: inline-block;
+    border: .1em solid black;
+    background-color: rgba(63, 63, 63, 1);
+    cursor: pointer;
+}
+
+.explorer ul.folders li:hover {
+    background-color: black;
+}
+
+.explorer ul.files li {
+    padding: .3em 1em;
+    cursor: move;
+    color: rgb(0, 0, 0);
+    border-bottom: .15em solid #49B383;
+    background-color: #53C390;
+}
+
+.explorer ul.files li:hover {
+    background-color: rgb(113, 215, 168);
 }
 
 .player {
@@ -66,20 +92,28 @@ body {
 }
 
 .track {
-    height: 29px;
-    background-color: #508cfa;
-    -webkit-border-radius: .1em;
-    -moz-border-radius: .1em;
+    cursor: move;
+    height: 19px;
+    padding: 5px 0;
+    background-color: #53C390;
+    color: rgb(60, 60, 60);
     border-radius: .2em;
 }
 
-.browser-top {
-    position: fixed;
-    height: 1em;
-    width: 21px;
-    background-color: white;
-    z-index: 2;
+.track span {
+    padding: 0 5px;
 }
+
+.browser-top {
+     position: fixed;
+     height: .9em;
+     width: 19px;
+     background-color: rgb(63, 63, 63);
+     border-radius: .3em;
+     z-index: 2;
+     cursor: ew-resize;
+     border: .1em solid black;
+ }
 
 .browser-line {
     position: fixed;
@@ -87,6 +121,7 @@ body {
     margin-left: 10px;
     height: 100%;
     background-color: red;
+    cursor: ew-resize;
     z-index: 1;
 }
 

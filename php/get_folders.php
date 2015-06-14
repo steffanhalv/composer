@@ -1,6 +1,5 @@
 <?php
-$folder = $_GET['folder'];
-$dir = "../files/".$folder."/";
+$dir = "../files/";
 $files = array();
 
 if(is_dir($dir)){
@@ -12,13 +11,9 @@ if(is_dir($dir)){
 
             } else {
 
-                $result = shell_exec('soxi -D '.$dir.$file);
-
                 $new_file = array();
 
                 $new_file[] = $file;
-                $new_file[] = $result;
-                $new_file[] = $folder;
 
                 $files[] = $new_file; // Add the file to the array
             }

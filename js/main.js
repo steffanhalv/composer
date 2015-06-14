@@ -27,12 +27,16 @@ $(document).ready(function() {
       var trackId = createTrackId();
       var width = ui.helper[0].attributes.duration.value;
       $(this).append('<div class="track" id="'+trackId+'" style="width: '+width+'px"><span>'+ui.helper[0].innerHTML+'</span><div id="jp_'+trackId+'"></div></div>');
+
+      $('#'+trackId).attr('pos_left', 0).attr('pos_right', 0);
+      var widthStart = 0;
+      var widthEnd = 0;
       $('#'+trackId).css({
         position: 'absolute',
         left: ui.position.left-$('.explorer').width()+$('.composer').scrollLeft()
       }).draggable({
         containment: '.composer ul',
-        snap: 'li',
+        snap: '.composer li, .browser-line',
         snapMode: 'inner',
         stop: function() {
           if (!pause) {
@@ -45,10 +49,49 @@ $(document).ready(function() {
           }
         }
       }).resizable({
-        handles: "e, w"
+        handles: "e, w",
+        start: function(e, ui) {
+
+          widthStart = $(this).width();
+
+          if (e.toElement.className.indexOf("ui-resizable-w") >= 0) {
+
+            $(this).css({
+              maxWidth: $(this).width() + Number($(this).attr('pos_left'))
+            });
+
+          } else {
+
+            $(this).css({
+              maxWidth: $(this).width() + Number($(this).attr('pos_right'))
+            });
+
+          }
+
+        },
+        stop: function(e, ui) {
+
+          widthEnd = $(this).width();
+
+          if (e.toElement.className.indexOf("ui-resizable-w") >= 0) {
+
+            var pos_left = Number($('#'+trackId).attr('pos_left'))+(widthStart-widthEnd)
+            $('#'+trackId).attr('pos_left', pos_left);
+
+          } else {
+
+            var pos_right = Number($('#'+trackId).attr('pos_right'))+(widthStart-widthEnd)
+            $('#'+trackId).attr('pos_right', pos_right);
+
+          }
+
+        }
       }).attr({
-        duration: ui.helper[0].attributes.duration.value
+        duration: ui.helper[0].attributes.duration.value,
+        folder: ui.helper[0].attributes.folder.value
       });
+
+      console.log(ui.helper[0].attributes);
 
       initjPlayer(trackId, ui.helper[0].innerHTML);
 
@@ -111,7 +154,7 @@ $(document).ready(function() {
       }
   });
 
-  fetchFiles();
+  fetchFolders();
 
   $('#play').click(function() {
     pause = !pause;
@@ -133,16 +176,18 @@ var initjPlayer = function(id, file) {
   $('#jp_'+id).jPlayer({
     ready: function() {
       $(this).jPlayer("setMedia",{
-        mp3: 'files/'+file
+        mp3: 'files/'+$('#'+id).attr('folder')+'/'+file
       });
 
       $('.browser-line').on('step', function() {
 
-        var currentTime = parseInt(($('.browser-line').position().left-$('.explorer').width()-$('.composer').scrollLeft())-$('#'+id).position().left)+10;
+        var currentTime = parseInt(($('.browser-line').position().left-$('.explorer').width()-$('.composer').scrollLeft())-$('#'+id).position().left)+10+Number($('#'+id).attr('pos_left'));
+
+        /* for repeat...
 
         while(currentTime>$('#'+id).attr('duration')) {
-          currentTime = currentTime - $('#'+id).attr('duration');
-        }
+          currentTime = currentTime - $('#'+id).attr('duration') + $('#'+id).attr('pos_left')
+        }*/
 
         if (($('#'+id).position().left-10)<=($('.browser-line').position().left-$('.explorer').width())&&
           ($('.browser-line').position().left-$('.explorer').width())<($('#'+id).position().left-10+$('#'+id).width())
@@ -197,7 +242,9 @@ var exportTimeline = function() {
   $('.track').each(function() {
     var track = {
       source: $(this).find('span').html(),
-      pad: $(this).position().left-10
+      pad: $(this).position().left-10,
+      trim: $(this).attr('pos_left'),
+      duration: $(this).width()
     };
 
     tracks.push(track);
