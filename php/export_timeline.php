@@ -15,11 +15,14 @@ function addFile($cmd, $file, $pad, $trim, $duration, $folder) {
 
 }
 
+$ext = 'mp3';
+
 foreach ($json_output as $trend){
     $cmd = addFile($cmd, $trend['source'], $trend['pad'], $trend['trim'], $trend['duration'], $trend['folder']);
+    $ext = $trend['extension'];
 }
 
-$cmd = $cmd."../files/result.mp3";
+$cmd = $cmd."../files/result.".$ext;
 
 $result = shell_exec($cmd);
 

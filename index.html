@@ -20,13 +20,24 @@
 </head>
 <body>
 
-  <div class="menu">
-    <ul>
-      <li>
-        File
-      </li>
-    </ul>
-  </div>
+  <ul class="menu">
+    <li>
+      <span>Import</span>
+      <ul>
+        <li>Project</li>
+        <li>Test2</li>
+        <li>Test3</li>
+      </ul>
+    </li>
+    <li>
+      <span>Export</span>
+      <ul>
+        <li onclick="exportTimeline('mp3')">Mp3</li>
+        <li onclick="exportTimeline('ogg')">Ogg</li>
+        <li onclick="exportTimeline('wav')">Wav</li>
+      </ul>
+    </li>
+  </ul>
 
   <div class="explorer">
 
@@ -41,31 +52,36 @@
   <div class="player">
 
     <button id="play">Play</button>
-    <button onclick="exportTimeline()">Export</button>
+    <button onclick="removeSelected('mp3')">Remove selected</button>
 
   </div>
 
   <div class="composer">
 
-    <div class="browser-top"></div>
-    <div class="browser-line"></div>
-    <ul>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-      <li></li>
-    </ul>
+    <div class="timeline">
+      <div class="top-line">
+      <div class="browser-top"></div>
+      </div>
+
+      <div class="browser-line"></div>
+      <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </div>
 
   </div>
 

@@ -20,6 +20,20 @@ $(document).ready(function() {
     }
   });
 
+  $( ".top-line" ).click(function(e) {
+    $( ".browser-top" ).css('left', e.offsetX+$('.explorer').width()-10+'px');
+    $( ".browser-line" ).css('left', e.offsetX+$('.explorer').width()-10+'px');
+  });
+
+  $( ".composer" ).scroll(function() {
+    $( ".top-line").css({
+      marginTop: $( this ).scrollTop()
+    });
+    $( ".composer ul").css({
+      marginTop: -$( this ).scrollTop()
+    });
+  });
+
   $( ".composer li" ).droppable({
     accept: ".file",
     drop: function(e, ui) {
@@ -176,6 +190,10 @@ $(document).ready(function() {
       play();
     }
 
+    if (e.which == 46) {
+      removeSelected();
+    }
+
   });
 
 });
@@ -198,25 +216,28 @@ var initjPlayer = function(id, file) {
 
       $('.browser-line').on('step', function() {
 
-        var currentTime = $('.browser-line').position().left-$('.explorer').width()-$('.composer').scrollLeft()-$('#'+id).position().left+10+Number($('#'+id).attr('pos_left'));
+        if (typeof $('#'+id).position()!=='undefined') {
 
-        if (currentTime>0&&currentTime<$('#'+id).width()+Number($('#'+id).attr('pos_left'))&&
-          $('#jp_'+id).data().jPlayer.status.paused&&!pause) {
+          var currentTime = $('.browser-line').position().left - $('.explorer').width() - $('.composer').scrollLeft() - $('#' + id).position().left + 10 + Number($('#' + id).attr('pos_left'));
 
-          $('#jp_'+id).jPlayer( "play", currentTime );
+          if (currentTime > 0 && currentTime < $('#' + id).width() + Number($('#' + id).attr('pos_left')) &&
+            $('#jp_' + id).data().jPlayer.status.paused && !pause) {
 
-        } else if (currentTime<Number($('#'+id).attr('pos_left'))) {
+            $('#jp_' + id).jPlayer("play", currentTime);
 
-          $('#jp_'+id).jPlayer( "pause" );
+          } else if (currentTime < Number($('#' + id).attr('pos_left'))) {
 
-        } else if (currentTime>Number($('#'+id).attr('pos_left'))+$('#'+id).width()) {
+            $('#jp_' + id).jPlayer("pause");
 
-          $('#jp_'+id).jPlayer( "pause" );
+          } else if (currentTime > Number($('#' + id).attr('pos_left')) + $('#' + id).width()) {
 
-        } else if (pause) {
+            $('#jp_' + id).jPlayer("pause");
 
-          $('#jp_'+id).jPlayer( "pause" );
+          } else if (pause) {
 
+            $('#jp_' + id).jPlayer("pause");
+
+          }
         }
       });
 
@@ -251,7 +272,7 @@ var play = function() {
 
 }
 
-var exportTimeline = function() {
+var exportTimeline = function(ext) {
 
   var tracks = [];
 
@@ -261,7 +282,8 @@ var exportTimeline = function() {
       pad: $(this).position().left-10,
       trim: $(this).attr('pos_left'),
       duration: $(this).width(),
-      folder: $(this).attr('folder')
+      folder: $(this).attr('folder'),
+      extension: ext
     };
 
     tracks.push(track);
@@ -276,5 +298,11 @@ var exportTimeline = function() {
       console.log(msg);
     }
   });
+
+};
+
+var removeSelected = function() {
+
+  $('.selected').remove();
 
 };
