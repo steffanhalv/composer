@@ -109,6 +109,7 @@ $(document).ready(function() {
 
   $( ".browser-line" ).draggable({
       containment: '.composer ul',
+      snap: '.track',
       axis: 'x',
       drag: function(e, ui) {
         $( ".browser-top").css({
@@ -181,26 +182,25 @@ var initjPlayer = function(id, file) {
 
       $('.browser-line').on('step', function() {
 
-        var currentTime = parseInt(($('.browser-line').position().left-$('.explorer').width()-$('.composer').scrollLeft())-$('#'+id).position().left)+10+Number($('#'+id).attr('pos_left'));
+        var currentTime = $('.browser-line').position().left-$('.explorer').width()-$('.composer').scrollLeft()-$('#'+id).position().left+10+Number($('#'+id).attr('pos_left'));
 
-        /* for repeat...
-
-        while(currentTime>$('#'+id).attr('duration')) {
-          currentTime = currentTime - $('#'+id).attr('duration') + $('#'+id).attr('pos_left')
-        }*/
-
-        if (($('#'+id).position().left-10)<=($('.browser-line').position().left-$('.explorer').width())&&
-          ($('.browser-line').position().left-$('.explorer').width())<($('#'+id).position().left-10+$('#'+id).width())
-          &&$('#jp_'+id).data().jPlayer.status.paused&&!pause) {
+        if (currentTime>0&&currentTime<$('#'+id).width()+Number($('#'+id).attr('pos_left'))&&
+          $('#jp_'+id).data().jPlayer.status.paused&&!pause) {
 
           $('#jp_'+id).jPlayer( "play", currentTime );
 
-        } else if (($('.browser-line').position().left-$('.explorer').width())>($('#'+id).position().left-10+$('#'+id).width())) {
+        } else if (currentTime<Number($('#'+id).attr('pos_left'))) {
+
+          $('#jp_'+id).jPlayer( "pause" );
+
+        } else if (currentTime>Number($('#'+id).attr('pos_left'))+$('#'+id).width()) {
 
           $('#jp_'+id).jPlayer( "pause" );
 
         } else if (pause) {
+
           $('#jp_'+id).jPlayer( "pause" );
+
         }
       });
 
