@@ -16,17 +16,6 @@ body {
     height: 2em;
 }
 
-.explorer {
-    position: absolute;
-    background-color: #595959;
-    border-bottom: .1em solid black;
-    border-right: .1em solid black;
-    width: 20%;
-    top: 2.1em;
-    z-index: 3;
-    bottom: 0;
-}
-
 .composer {
     position: absolute;
     background-color: #939393;
@@ -34,8 +23,8 @@ body {
     margin-left: .1em;
     left: 20%;
     right: 0;
-    top: 2.1em;
-    bottom: 10em;
+    top: 4.1em;
+    bottom: 0;
     overflow: auto;
     z-index: 2;
 }
@@ -52,6 +41,19 @@ body {
     border-top: 1px solid rgb(219, 219, 219);
     padding: 0;
     background-color: rgb(147, 147, 147);
+}
+
+.explorer {
+    position: absolute;
+    background-color: #595959;
+    border-bottom: .1em solid black;
+    border-right: .1em solid black;
+    width: 20%;
+    top: 2.1em;
+    z-index: 3;
+    bottom: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .explorer ul.folders li {
@@ -87,21 +89,28 @@ body {
     left: 20%;
     right: 0;
     height: 9.9em;
-    bottom: 0;
+    top: 2.1em;
+    height: 2em;
     z-index: 2;
 }
 
 .track {
+    overflow: hidden;
     cursor: move;
     height: 19px;
     padding: 5px 0;
     background-color: #53C390;
     color: rgb(60, 60, 60);
-    border-radius: .2em;
+    border-radius: .3em;
+}
+
+.track.selected {
+    background-color: #58c3b4;
 }
 
 .track span {
     padding: 0 5px;
+    font-size: .7em;
 }
 
 .browser-top {

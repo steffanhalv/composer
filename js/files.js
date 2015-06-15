@@ -60,8 +60,11 @@ var initFiles = function() {
       helper: function(){
         return '<div class="audio track" folder="'+$(this).attr('folder')+'" duration="'+Number($(this).attr('duration'))+'" style="width: '+Number($(this).attr('duration'))+'px">'+name+'</div>'
       },
-      containment: 'document',
-      cursor: 'move'
+      scroll: false,
+      containment: 'window',
+      appendTo: 'body',
+      cursor: 'move',
+      zIndex: 9
     });
 
   });

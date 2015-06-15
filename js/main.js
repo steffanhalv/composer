@@ -89,6 +89,11 @@ $(document).ready(function() {
       }).attr({
         duration: ui.helper[0].attributes.duration.value,
         folder: ui.helper[0].attributes.folder.value
+      }).mousedown(function() {
+
+        $('.track').removeClass('selected');
+        $(this).addClass('selected');
+
       });
 
       console.log(ui.helper[0].attributes);
@@ -160,6 +165,17 @@ $(document).ready(function() {
   $('#play').click(function() {
     pause = !pause;
     play();
+  });
+
+  $(document).keydown(function(e) {
+
+    console.log(e.which);
+
+    if (e.which == 32) {
+      pause = !pause;
+      play();
+    }
+
   });
 
 });
@@ -244,7 +260,8 @@ var exportTimeline = function() {
       source: $(this).find('span').html(),
       pad: $(this).position().left-10,
       trim: $(this).attr('pos_left'),
-      duration: $(this).width()
+      duration: $(this).width(),
+      folder: $(this).attr('folder')
     };
 
     tracks.push(track);
