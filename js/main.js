@@ -49,7 +49,7 @@ $(document).ready(function() {
 
         var trackId = createTrackId();
         var width = ui.helper[0].attributes.duration.value;
-        $(this).append('<div class="track" id="' + trackId + '" style="width: ' + width + 'px"><span>' + ui.helper[0].innerText + '</span><div id="jp_' + trackId + '"></div></div>');
+        $(this).append('<div class="track" id="' + trackId + '" style="width: ' + width + 'px"><span>' + ui.helper[0].attributes.file_name.value + '</span><div id="jp_' + trackId + '"></div></div>');
 
         $('#' + trackId).attr('pos_left', 0).attr('pos_right', 0);
         var widthStart = 0;
@@ -111,15 +111,19 @@ $(document).ready(function() {
           }
         }).attr({
           duration: ui.helper[0].attributes.duration.value,
-          folder: ui.helper[0].attributes.folder.value
+          folder: ui.helper[0].attributes.folder.value,
+          file_name: ui.helper[0].attributes.file_name.value,
+          extension: ui.helper[0].attributes.extension.value
         }).mousedown(function () {
 
-          $('.track').removeClass('selected');
+          if (!multiselect) {
+            $('.track').removeClass('selected');
+          }
           $(this).addClass('selected');
 
         });
 
-        initjPlayer(trackId, ui.helper[0].innerText);
+        initjPlayer(trackId);
 
       }
     });
@@ -190,7 +194,10 @@ $(document).ready(function() {
     play();
   });
 
+  var multiselect = false;
   $(document).keydown(function(e) {
+
+    console.log(e.which);
 
     if (e.which == 32) {
       pause = !pause;
@@ -199,6 +206,10 @@ $(document).ready(function() {
 
     if (e.which == 46) {
       removeSelected();
+    }
+
+    if (e.which == 17 || 91) {
+      multiselect = true;
     }
 
     //alt key
@@ -225,6 +236,10 @@ $(document).ready(function() {
   });
 
   $(document).keyup(function(e) {
+
+    if (e.which == 17 || 91) {
+      multiselect = false;
+    }
 
     //alt key
     if (e.which == 18) {
@@ -259,12 +274,12 @@ var createTrackId = function() {
 
 
 
-var initjPlayer = function(id, file) {
+var initjPlayer = function(id) {
 
   $('#jp_'+id).jPlayer({
     ready: function() {
       $(this).jPlayer("setMedia",{
-        mp3: 'files/'+$('#'+id).attr('folder')+'/'+file
+        mp3: 'files/'+$('#'+id).attr('folder')+'/'+$('#'+id).attr('file_name')+'.'+$('#'+id).attr('extension')
       });
 
       $('.browser-line').on('step', function() {
@@ -331,7 +346,7 @@ var exportTimeline = function(ext) {
 
   $('.track').each(function() {
     var track = {
-      source: $(this).find('span').html(),
+      source: $(this).attr('file_name')+'.'+$(this).attr('extension'),
       pad: $(this).position().left-10,
       trim: $(this).attr('pos_left'),
       duration: $(this).width(),

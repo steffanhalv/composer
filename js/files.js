@@ -6,7 +6,10 @@ var createFolder = function(name) {
 
 var createFile = function(src, dr, folder) {
 
-  return '<li><div class="file" duration="'+dr+'" folder="'+folder+'" extension="'+src.split('.').pop()+'">'+src+'</div></li>'
+  var extension = src.split('.').pop();
+  var name = src.replace('.'+extension, '');
+
+  return '<li><div class="file" duration="'+dr+'" file_name="'+name+'" folder="'+folder+'" extension="'+extension+'">'+name+'</div></li>'
 
 };
 
@@ -51,14 +54,12 @@ var initFiles = function() {
 
   $(".file").each(function(){
 
-    var name = $(this).html();
-
     $( this ).draggable({
       revert: 'invalid',
       snap: '.composer li, .browser-line',
       snapMode: 'inner',
       helper: function(){
-        return '<div class="audio track" folder="'+$(this).attr('folder')+'" duration="'+Number($(this).attr('duration'))+'" style="width: '+Number($(this).attr('duration'))+'px">'+name+'</div>'
+        return '<div class="audio track" extension="'+$(this).attr('extension')+'" file_name="'+$(this).attr('file_name')+'" folder="'+$(this).attr('folder')+'" duration="'+Number($(this).attr('duration'))+'" style="width: '+Number($(this).attr('duration'))+'px"><span>'+$(this).attr('file_name')+'</span></div>'
       },
       scroll: false,
       containment: 'window',
