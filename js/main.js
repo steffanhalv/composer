@@ -34,88 +34,97 @@ $(document).ready(function() {
     });
   });
 
-  $( ".composer li" ).droppable({
-    accept: ".file",
-    drop: function(e, ui) {
+  var drop = function(accept, isNew) {
+    $(".composer li").droppable({
+      accept: accept,
+      drop: function (e, ui) {
 
-      var trackId = createTrackId();
-      var width = ui.helper[0].attributes.duration.value;
-      $(this).append('<div class="track" id="'+trackId+'" style="width: '+width+'px"><span>'+ui.helper[0].innerHTML+'</span><div id="jp_'+trackId+'"></div></div>');
+        var left;
 
-      $('#'+trackId).attr('pos_left', 0).attr('pos_right', 0);
-      var widthStart = 0;
-      var widthEnd = 0;
-      $('#'+trackId).css({
-        position: 'absolute',
-        left: ui.position.left-$('.explorer').width()+$('.composer').scrollLeft()
-      }).draggable({
-        containment: '.composer ul',
-        snap: '.composer li, .browser-line',
-        snapMode: 'inner',
-        stop: function() {
-          if (!pause) {
-            pause = true;
-
-            setTimeout(function() {
-              pause = false;
-              play();
-            }, 500);
-          }
+        if (!isNew) {
+          left = ui.position.left + $('.composer').scrollLeft();
+        } else {
+          left = ui.position.left - $('.explorer').width() + $('.composer').scrollLeft();
         }
-      }).resizable({
-        handles: "e, w",
-        start: function(e, ui) {
 
-          widthStart = $(this).width();
+        var trackId = createTrackId();
+        var width = ui.helper[0].attributes.duration.value;
+        $(this).append('<div class="track" id="' + trackId + '" style="width: ' + width + 'px"><span>' + ui.helper[0].innerText + '</span><div id="jp_' + trackId + '"></div></div>');
 
-          if (e.toElement.className.indexOf("ui-resizable-w") >= 0) {
+        $('#' + trackId).attr('pos_left', 0).attr('pos_right', 0);
+        var widthStart = 0;
+        var widthEnd = 0;
+        $('#' + trackId).css({
+          position: 'absolute',
+          left: left
+        }).draggable({
+          containment: '.composer ul',
+          snap: '.composer li, .browser-line',
+          snapMode: 'inner',
+          stop: function () {
+            if (!pause) {
+              pause = true;
 
-            $(this).css({
-              maxWidth: $(this).width() + Number($(this).attr('pos_left'))
-            });
+              setTimeout(function () {
+                pause = false;
+                play();
+              }, 500);
+            }
+          }
+        }).resizable({
+          handles: "e, w",
+          start: function (e, ui) {
 
-          } else {
+            widthStart = $(this).width();
 
-            $(this).css({
-              maxWidth: $(this).width() + Number($(this).attr('pos_right'))
-            });
+            if (e.toElement.className.indexOf("ui-resizable-w") >= 0) {
+
+              $(this).css({
+                maxWidth: $(this).width() + Number($(this).attr('pos_left'))
+              });
+
+            } else {
+
+              $(this).css({
+                maxWidth: $(this).width() + Number($(this).attr('pos_right'))
+              });
+
+            }
+
+          },
+          stop: function (e, ui) {
+
+            widthEnd = $(this).width();
+
+            if (e.toElement.className.indexOf("ui-resizable-w") >= 0) {
+
+              var pos_left = Number($('#' + trackId).attr('pos_left')) + (widthStart - widthEnd)
+              $('#' + trackId).attr('pos_left', pos_left);
+
+            } else {
+
+              var pos_right = Number($('#' + trackId).attr('pos_right')) + (widthStart - widthEnd)
+              $('#' + trackId).attr('pos_right', pos_right);
+
+            }
 
           }
+        }).attr({
+          duration: ui.helper[0].attributes.duration.value,
+          folder: ui.helper[0].attributes.folder.value
+        }).mousedown(function () {
 
-        },
-        stop: function(e, ui) {
+          $('.track').removeClass('selected');
+          $(this).addClass('selected');
 
-          widthEnd = $(this).width();
+        });
 
-          if (e.toElement.className.indexOf("ui-resizable-w") >= 0) {
+        initjPlayer(trackId, ui.helper[0].innerText);
 
-            var pos_left = Number($('#'+trackId).attr('pos_left'))+(widthStart-widthEnd)
-            $('#'+trackId).attr('pos_left', pos_left);
-
-          } else {
-
-            var pos_right = Number($('#'+trackId).attr('pos_right'))+(widthStart-widthEnd)
-            $('#'+trackId).attr('pos_right', pos_right);
-
-          }
-
-        }
-      }).attr({
-        duration: ui.helper[0].attributes.duration.value,
-        folder: ui.helper[0].attributes.folder.value
-      }).mousedown(function() {
-
-        $('.track').removeClass('selected');
-        $(this).addClass('selected');
-
-      });
-
-      console.log(ui.helper[0].attributes);
-
-      initjPlayer(trackId, ui.helper[0].innerHTML);
-
-    }
-  });
+      }
+    });
+  };
+  drop('.file', true);
 
   $( ".composer" ).scroll(function() {
       $( ".browser-top" ).css({
@@ -183,8 +192,6 @@ $(document).ready(function() {
 
   $(document).keydown(function(e) {
 
-    console.log(e.which);
-
     if (e.which == 32) {
       pause = !pause;
       play();
@@ -192,6 +199,52 @@ $(document).ready(function() {
 
     if (e.which == 46) {
       removeSelected();
+    }
+
+    //alt key
+    if (e.which == 18) {
+      drop('.file, .track', false);
+      $('.track').draggable({
+        containment: '.composer ul',
+        snap: '.composer li, .browser-line',
+        snapMode: 'inner',
+        helper: 'clone',
+        stop: function() {
+          if (!pause) {
+            pause = true;
+
+            setTimeout(function() {
+              pause = false;
+              play();
+            }, 500);
+          }
+        }
+      })
+    }
+
+  });
+
+  $(document).keyup(function(e) {
+
+    //alt key
+    if (e.which == 18) {
+      drop('.file', true);
+      $('.track').draggable({
+        containment: '.composer ul',
+        snap: '.composer li, .browser-line',
+        snapMode: 'inner',
+        helper: 'original',
+        stop: function() {
+          if (!pause) {
+            pause = true;
+
+            setTimeout(function() {
+              pause = false;
+              play();
+            }, 500);
+          }
+        }
+      })
     }
 
   });
