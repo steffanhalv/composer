@@ -63,7 +63,7 @@ ul li {
     position: absolute;
     background-color: #939393;
     border-bottom: .1em solid black;
-    margin-left: .1em;
+    margin: .5em;
     left: 20%;
     right: 0;
     top: 4.1em;
@@ -161,7 +161,7 @@ ul li {
 
 .browser-top {
      position: fixed;
-     top: 4.1em;
+     top: 4.6em;
      height: .9em;
      width: 19px;
      background-color: rgb(63, 63, 63);

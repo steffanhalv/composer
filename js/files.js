@@ -38,6 +38,7 @@ var fetchFiles = function(folder) {
     success: function(result){
       $('.explorer ul.files').html("");
       $.each(result, function() {
+          console.log(result);
         var file = createFile(String(this[0]), this[1], this[2]);
         $('.explorer ul.files').append(file);
       });

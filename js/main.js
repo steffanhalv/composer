@@ -2,6 +2,11 @@ var pause = true;
 
 $(document).ready(function() {
 
+    $( ".timeline" ).resizable({
+        handles: "e",
+        containment: "parent"
+    });
+
   $( ".explorer" ).resizable({
     handles: "e",
     resize: function(e, ui) {
